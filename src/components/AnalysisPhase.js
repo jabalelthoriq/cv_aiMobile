@@ -167,26 +167,56 @@ export default function AnalysisPhase({ imageUri, analisis, jobs, onStartIntervi
         </View>
 
         {/* Lowongan cocok */}
-        <SectionHead label="Lowongan yang Cocok" />
-        {jobs?.map((job) => (
-          <View key={job.id} style={s.jobCard}>
-            <View style={s.jobLeft}>
-              <Text style={s.jobPos}>{job.posisi}</Text>
-              <Text style={s.jobCo}>{job.perusahaan}</Text>
-              <View style={s.jobMeta}>
-                <View style={s.metaChip}><Text style={s.metaText}>{job.lokasi}</Text></View>
-                <View style={s.metaChip}><Text style={s.metaText}>{job.tipe}</Text></View>
-                <View style={s.metaChip}><Text style={s.metaText}>{job.gaji}</Text></View>
-              </View>
+<SectionHead label="Lowongan yang Cocok" />
+
+{jobs
+  ?.sort((a, b) => (b.final_score ?? b.cocok ?? 0) - (a.final_score ?? a.cocok ?? 0))
+  .slice(0, 3)
+  .map((job, index) => (
+    <View key={index} style={s.jobCard}>
+      <View style={s.jobLeft}>
+        <Text style={s.jobPos}>{job.job ?? job.posisi ?? 'Lowongan'}</Text>
+        <Text style={s.jobCo}>{job.perusahaan ?? ''}</Text>
+
+        <View style={s.jobMeta}>
+          {job.lokasi && (
+            <View style={s.metaChip}>
+              <Text style={s.metaText}>{job.lokasi}</Text>
             </View>
-            <View style={s.jobRight}>
-              <Text style={[s.matchPct, {
-                color: job.cocok >= 85 ? theme.green : job.cocok >= 70 ? theme.accent : theme.amber,
-              }]}>{job.cocok}%</Text>
-              <Text style={s.matchLabel}>kecocokan</Text>
+          )}
+          {job.tipe && (
+            <View style={s.metaChip}>
+              <Text style={s.metaText}>{job.tipe}</Text>
             </View>
-          </View>
-        ))}
+          )}
+          {job.gaji && (
+            <View style={s.metaChip}>
+              <Text style={s.metaText}>{job.gaji}</Text>
+            </View>
+          )}
+        </View>
+      </View>
+
+      <View style={s.jobRight}>
+        <Text
+          style={[
+            s.matchPct,
+            {
+              color:
+                (job.final_score ?? job.cocok ?? 0) >= 85
+                  ? theme.green
+                  : (job.final_score ?? job.cocok ?? 0) >= 70
+                  ? theme.accent
+                  : theme.amber,
+            },
+          ]}
+        >
+          {(job.final_score ?? job.cocok ?? 0).toFixed?.(1) ?? '0'}%
+        </Text>
+        <Text style={s.matchLabel}>kecocokan</Text>
+      </View>
+    </View>
+  ))}
 
         {/* Interview CTA */}
         <View style={s.ctaWrap}>

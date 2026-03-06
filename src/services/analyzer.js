@@ -1,8 +1,8 @@
 // src/services/analyzer.js
 // Ganti BASE_URL dengan endpoint AI kamu yang sesungguhnya.
 
-const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? 'https://api.careerai.dev/v1';
-
+const BASE_URL = "http://192.168.225.234:8000";
+console.log("BASE_URL:", BASE_URL);
 /**
  * Kirim file CV ke API untuk dianalisis.
  * @param {{ uri, name, mimeType }} asset

@@ -23,7 +23,7 @@ import {
 
 type Phase = 'upload' | 'scanning' | 'analisis' | 'wawancara';
 
-const USE_MOCK = true; // Ganti false saat API sudah siap
+const USE_MOCK = false; // Ganti false saat API sudah siap
 
 export default function MainScreen() {
   const [phase,      setPhase]      = useState<Phase>('upload');
@@ -55,11 +55,11 @@ export default function MainScreen() {
         setJobs(jobData);
         setPhase('analisis');
       }
-    } catch (err) {
-      console.error('Analisis gagal:', err);
-      setPhase('upload');
-    } finally {
-      setLoading(false);
+      } catch (err) {
+        console.error('Analisis gagal:', err);
+        setPhase('upload');
+      } finally {
+        setLoading(false);
     }
   }, []);
 
